@@ -281,11 +281,16 @@ h1:hover::after {
 .executor-card {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
-    padding: 1.8rem;
+    padding: 2rem;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-1);
 }
 
 .executor-card::before {
@@ -301,6 +306,18 @@ h1:hover::after {
     z-index: -1;
 }
 
+.executor-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 .executor-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: var(--shadow-2), var(--shadow-3);
@@ -311,29 +328,80 @@ h1:hover::after {
     opacity: 0.1;
 }
 
+.executor-card:hover::after {
+    opacity: 1;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    position: relative;
+}
+
 .executor-logo {
-    width: 60px;
-    height: 60px;
+    width: 65px;
+    height: 65px;
     border-radius: 15px;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow-1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .executor-card:hover .executor-logo {
-    transform: scale(1.1);
+    transform: scale(1.1) rotate(5deg);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-2);
 }
 
-/* Enhanced Status Indicators */
-.status {
-    padding: 0.4rem 0.8rem;
-    border-radius: 15px;
+.card-header h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(114, 137, 218, 0.3);
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.version {
     font-size: 0.9rem;
-    font-weight: 500;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.version::before {
+    content: '⚡';
+    color: var(--accent-color);
+}
+
+.status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .status::before {
@@ -352,14 +420,43 @@ h1:hover::after {
     transform: translateX(0);
 }
 
-/* Enhanced Buttons */
+.status-online {
+    background: rgba(67, 181, 129, 0.15);
+    color: var(--success-color);
+    border: 1px solid rgba(67, 181, 129, 0.3);
+}
+
+.status-online::after {
+    content: '●';
+    font-size: 0.8rem;
+    animation: pulse 2s infinite;
+}
+
+.status-offline {
+    background: rgba(240, 71, 71, 0.15);
+    color: var(--error-color);
+    border: 1px solid rgba(240, 71, 71, 0.3);
+}
+
+.status-maintenance {
+    background: rgba(250, 166, 26, 0.15);
+    color: var(--warning-color);
+    border: 1px solid rgba(250, 166, 26, 0.3);
+}
+
+.card-actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: auto;
+}
+
 .btn {
     padding: 0.8rem 1.5rem;
     border-radius: 12px;
     border: none;
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
@@ -367,6 +464,8 @@ h1:hover::after {
     text-decoration: none;
     position: relative;
     overflow: hidden;
+    flex: 1;
+    justify-content: center;
 }
 
 .btn::before {
@@ -385,15 +484,13 @@ h1:hover::after {
     transform: translateX(100%);
 }
 
-.btn-primary {
-    background: var(--gradient-1);
-    color: white;
-    box-shadow: var(--shadow-1);
+.btn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
 }
 
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-2);
+.btn:hover i {
+    transform: translateY(-2px);
 }
 
 .btn-download {
@@ -406,6 +503,43 @@ h1:hover::after {
     background: #3ca374;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(67, 181, 129, 0.4);
+}
+
+.btn-alt {
+    background: var(--warning-color);
+    color: white;
+    box-shadow: 0 5px 15px rgba(250, 166, 26, 0.3);
+}
+
+.btn-alt:hover {
+    background: #e69500;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(250, 166, 26, 0.4);
+}
+
+.btn-discord {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: var(--shadow-1);
+    padding: 0.8rem;
+    flex: 0 0 auto;
+}
+
+.btn-discord:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-2);
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Enhanced Animations */
